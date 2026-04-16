@@ -1,0 +1,17 @@
+﻿@model List<EventEase.Models.Booking>
+
+<h1>Bookings</h1>
+
+@foreach (var b in Model)
+{
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+        <p><b>Reference:</b> @b.BookingReference</p>
+        <p><b>Status:</b> @b.Status</p>
+
+        <p><b>Venue:</b> @b.Venue?.VenueName</p>
+        <p><b>Event:</b> @b.Event?.EventName</p>
+
+        <p><b>Start:</b> @b.StartDate</p>
+        <p><b>End:</b> @b.EndDate</p>
+    </div>
+}

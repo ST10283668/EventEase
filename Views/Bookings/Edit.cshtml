@@ -1,0 +1,26 @@
+﻿@model EventEase.Models.Booking
+
+<h2>Edit Booking</h2>
+
+<form method="post">
+    <input type="hidden" name="BookingId" value="@Model.BookingId" />
+
+    <input name="BookingReference" value="@Model.BookingReference" />
+    <input name="Status" value="@Model.Status" />
+
+    <select name="EventId">
+        @foreach (var e in ViewBag.Events)
+        {
+            <option value="@e.EventId">@e.EventName</option>
+        }
+    </select>
+
+    <select name="VenueId">
+        @foreach (var v in ViewBag.Venues)
+        {
+            <option value="@v.VenueId">@v.VenueName</option>
+        }
+    </select>
+
+    <button type="submit">Update</button>
+</form>

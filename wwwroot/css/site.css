@@ -1,0 +1,42 @@
+body {
+    background-color: #0a0a0a;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
+    margin: 0;
+}
+
+/* NAVBAR */
+nav {
+    background-color: #000000;
+    padding: 15px;
+}
+
+    nav a {
+        color: #00ff88;
+        margin-right: 20px;
+        font-weight: bold;
+    }
+
+/* PAGE CONTENT */
+.container {
+    padding: 20px;
+}
+
+/* HEADINGS */
+h1 {
+    color: #00ff88;
+}
+
+/* CARDS */
+div {
+    background-color: #1a1a1a;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+/* LINKS */
+a {
+    color: #00ff88;
+    text-decoration: none;
+}

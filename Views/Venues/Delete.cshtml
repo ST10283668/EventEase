@@ -1,0 +1,10 @@
+﻿@model EventEase.Models.Venue
+
+<h2>Delete Venue</h2>
+
+<p>Are you sure you want to delete @Model.VenueName?</p>
+
+<form method="post">
+    <input type="hidden" name="id" value="@Model.VenueId" />
+    <button type="submit">Delete</button>
+</form>

@@ -1,0 +1,10 @@
+﻿@model EventEase.Models.Booking
+
+<h2>Delete Booking</h2>
+
+<p>Are you sure you want to delete @Model.BookingReference?</p>
+
+<form method="post">
+    <input type="hidden" name="id" value="@Model.BookingId" />
+    <button type="submit">Delete</button>
+</form>

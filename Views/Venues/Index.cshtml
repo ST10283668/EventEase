@@ -1,0 +1,18 @@
+﻿@model List<EventEase.Models.Venue>
+
+<h1>Venues</h1>
+
+<a href="/Venues/Create">Create New</a>
+
+@foreach (var v in Model)
+{
+    <div>
+        <h3>@v.VenueName</h3>
+        <p>@v.Location</p>
+        <p>Capacity: @v.Capacity</p>
+
+        <a href="/Venues/Details/@v.VenueId">Details</a> |
+        <a href="/Venues/Edit/@v.VenueId">Edit</a> |
+        <a href="/Venues/Delete/@v.VenueId">Delete</a>
+    </div>
+}

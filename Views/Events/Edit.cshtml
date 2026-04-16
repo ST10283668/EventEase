@@ -1,0 +1,25 @@
+﻿@model EventEase.Models.Event
+
+<h2>Edit Event</h2>
+
+<form method="post">
+    <input type="hidden" name="EventId" value="@Model.EventId" />
+
+    <input name="EventName" value="@Model.EventName" />
+
+    <select name="VenueId">
+        @foreach (var v in ViewBag.Venues)
+        {
+            <option value="@v.VenueId">@v.VenueName</option>
+        }
+    </select>
+
+    <select name="EventTypeId">
+        @foreach (var t in ViewBag.EventTypes)
+        {
+            <option value="@t.EventTypeId">@t.TypeName</option>
+        }
+    </select>
+
+    <button type="submit">Update</button>
+</form>

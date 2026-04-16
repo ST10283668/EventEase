@@ -1,0 +1,12 @@
+﻿@model EventEase.Models.Venue
+
+<h2>Edit Venue</h2>
+
+<form method="post">
+    <input name="VenueId" value="@Model.VenueId" type="hidden" />
+    <input name="VenueName" value="@Model.VenueName" />
+    <input name="Location" value="@Model.Location" />
+    <input name="Capacity" value="@Model.Capacity" />
+
+    <button type="submit">Update</button>
+</form>
