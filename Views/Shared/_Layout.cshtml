@@ -96,8 +96,16 @@
     </nav>
 
     <div class="container">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+        }
         @RenderBody()
     </div>
-
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

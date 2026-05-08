@@ -2,9 +2,14 @@
 
 <h2>Delete Event</h2>
 
-<p>Are you sure you want to delete @Model.EventName?</p>
+<p>Are you sure you want to delete?</p>
 
-<form method="post">
+<p><b>@Model.EventName</b></p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.EventId" />
-    <button type="submit">Delete</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
 </form>
+
+<a asp-action="Index">Cancel</a>

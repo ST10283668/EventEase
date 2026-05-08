@@ -1,26 +1,58 @@
-﻿@model EventEase.Models.Booking
+@model EventEase.Models.Booking
 
 <h2>Edit Booking</h2>
 
-<form method="post">
-    <input type="hidden" name="BookingId" value="@Model.BookingId" />
+<form asp-action="Edit" method="post">
+    @Html.AntiForgeryToken()
+    <input asp-for="BookingId" type="hidden" />
 
-    <input name="BookingReference" value="@Model.BookingReference" />
-    <input name="Status" value="@Model.Status" />
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <select name="EventId">
-        @foreach (var e in ViewBag.Events)
-        {
-            <option value="@e.EventId">@e.EventName</option>
-        }
-    </select>
+    <div class="mb-3">
+        <label asp-for="BookingReference"></label>
+        <input asp-for="BookingReference" class="form-control" />
+    </div>
 
-    <select name="VenueId">
-        @foreach (var v in ViewBag.Venues)
-        {
-            <option value="@v.VenueId">@v.VenueName</option>
-        }
-    </select>
+    <div class="mb-3">
+        <label asp-for="BookingDate"></label>
+        <input asp-for="BookingDate" type="datetime-local" class="form-control" />
+    </div>
 
-    <button type="submit">Update</button>
+    <div class="mb-3">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VenueId"></label>
+        <select asp-for="VenueId" asp-items="ViewBag.Venues" class="form-control">
+            <option value="">Select Venue</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EventId"></label>
+        <select asp-for="EventId" asp-items="ViewBag.Events" class="form-control">
+            <option value="">Select Event</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Status"></label>
+        <input asp-for="Status" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn-green">Update</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

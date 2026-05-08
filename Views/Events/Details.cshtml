@@ -1,6 +1,15 @@
 ﻿@model EventEase.Models.Event
 
-<h2>@Model.EventName</h2>
+<h2>Event Details</h2>
 
-<p>Venue: @Model.Venue?.VenueName</p>
-<p>Type: @Model.EventType?.TypeName</p>
+<p><b>Event Name:</b> @Model.EventName</p>
+
+<p><b>Venue:</b> @Model.Venue?.VenueName</p>
+
+<p><b>Location:</b> @Model.Venue?.Location</p>
+
+<p><b>Capacity:</b> @Model.Venue?.Capacity</p>
+
+<p><b>Event Type:</b> @Model.EventType?.TypeName</p>
+
+<a href="/Events">Back</a>

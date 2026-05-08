@@ -1,11 +1,43 @@
-﻿@model EventEase.Models.Venue
+@model EventEase.Models.Venue
 
 <h2>Create Venue</h2>
 
-<form method="post">
-    <input name="VenueName" placeholder="Name" />
-    <input name="Location" placeholder="Location" />
-    <input name="Capacity" type="number" placeholder="Capacity" />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
 
-    <button type="submit">Save</button>
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="VenueName"></label>
+        <input asp-for="VenueName" class="form-control" />
+        <span asp-validation-for="VenueName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Capacity"></label>
+        <input asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Venue Image</label>
+        <input type="file" name="imageFile" accept="image/*" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn-green">Save</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

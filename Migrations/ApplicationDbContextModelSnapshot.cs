@@ -35,8 +35,7 @@ namespace EventEase.Migrations
 
                     b.Property<string>("BookingReference")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
@@ -88,7 +87,7 @@ namespace EventEase.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<int?>("EventTypeId")
+                    b.Property<int>("EventTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -97,7 +96,7 @@ namespace EventEase.Migrations
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("VenueId")
+                    b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("EventId");
@@ -129,56 +128,6 @@ namespace EventEase.Migrations
                     b.HasKey("EventTypeId");
 
                     b.ToTable("EventTypes");
-
-                    b.HasData(
-                        new
-                        {
-                            EventTypeId = 1,
-                            Description = "Professional conferences and seminars",
-                            TypeName = "Conference"
-                        },
-                        new
-                        {
-                            EventTypeId = 2,
-                            Description = "Wedding ceremonies and receptions",
-                            TypeName = "Wedding"
-                        },
-                        new
-                        {
-                            EventTypeId = 3,
-                            Description = "Music concerts and live performances",
-                            TypeName = "Concert"
-                        },
-                        new
-                        {
-                            EventTypeId = 4,
-                            Description = "Corporate functions and team events",
-                            TypeName = "Corporate"
-                        },
-                        new
-                        {
-                            EventTypeId = 5,
-                            Description = "Art shows, trade fairs and exhibitions",
-                            TypeName = "Exhibition"
-                        },
-                        new
-                        {
-                            EventTypeId = 6,
-                            Description = "Birthday parties and celebrations",
-                            TypeName = "Birthday"
-                        },
-                        new
-                        {
-                            EventTypeId = 7,
-                            Description = "Sporting events and tournaments",
-                            TypeName = "Sports"
-                        },
-                        new
-                        {
-                            EventTypeId = 8,
-                            Description = "Other event types",
-                            TypeName = "Other"
-                        });
                 });
 
             modelBuilder.Entity("EventEase.Models.Venue", b =>
@@ -212,35 +161,6 @@ namespace EventEase.Migrations
                     b.HasKey("VenueId");
 
                     b.ToTable("Venues");
-
-                    b.HasData(
-                        new
-                        {
-                            VenueId = 1,
-                            Capacity = 500,
-                            Description = "A luxurious ballroom with state-of-the-art facilities.",
-                            ImageUrl = "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800",
-                            Location = "123 Main Street, Sandton, Johannesburg",
-                            VenueName = "The Grand Ballroom"
-                        },
-                        new
-                        {
-                            VenueId = 2,
-                            Capacity = 300,
-                            Description = "Modern conference facilities with stunning harbour views.",
-                            ImageUrl = "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800",
-                            Location = "45 Harbour Road, V&A Waterfront, Cape Town",
-                            VenueName = "Waterfront Conference Centre"
-                        },
-                        new
-                        {
-                            VenueId = 3,
-                            Capacity = 150,
-                            Description = "An elegant outdoor pavilion surrounded by beautiful gardens.",
-                            ImageUrl = "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800",
-                            Location = "78 Botanical Avenue, Durban North, Durban",
-                            VenueName = "Garden Pavilion"
-                        });
                 });
 
             modelBuilder.Entity("EventEase.Models.Booking", b =>
@@ -267,12 +187,14 @@ namespace EventEase.Migrations
                     b.HasOne("EventEase.Models.EventType", "EventType")
                         .WithMany("Events")
                         .HasForeignKey("EventTypeId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("EventEase.Models.Venue", "Venue")
                         .WithMany("Events")
                         .HasForeignKey("VenueId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("EventType");
 

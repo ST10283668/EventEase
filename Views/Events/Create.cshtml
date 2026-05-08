@@ -1,23 +1,67 @@
-﻿@model EventEase.Models.Event
+@model EventEase.Models.Event
 
 <h2>Create Event</h2>
 
-<form method="post">
-    <input name="EventName" placeholder="Event Name" />
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
 
-    <select name="VenueId">
-        @foreach (var v in ViewBag.Venues)
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="EventName"></label>
+        <input asp-for="EventName" class="form-control" />
+        <span asp-validation-for="EventName" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" type="datetime-local" class="form-control" />
+        <span asp-validation-for="EndDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VenueId"></label>
+        <select asp-for="VenueId" asp-items="ViewBag.Venues" class="form-control">
+            <option value="">Select Venue</option>
+        </select>
+        @if (ViewBag.HasVenues == false)
         {
-            <option value="@v.VenueId">@v.VenueName</option>
+            <div class="text-warning">Create a venue before adding an event.</div>
         }
-    </select>
+        <span asp-validation-for="VenueId" class="text-danger"></span>
+    </div>
 
-    <select name="EventTypeId">
-        @foreach (var t in ViewBag.EventTypes)
+    <div class="mb-3">
+        <label asp-for="EventTypeId"></label>
+        <select asp-for="EventTypeId" asp-items="ViewBag.EventTypes" class="form-control">
+            <option value="">Select Event Type</option>
+        </select>
+        @if (ViewBag.HasEventTypes == false)
         {
-            <option value="@t.EventTypeId">@t.TypeName</option>
+            <div class="text-warning">No event types are available yet. Restart the app to load the default event types.</div>
         }
-    </select>
+        <span asp-validation-for="EventTypeId" class="text-danger"></span>
+    </div>
 
-    <button type="submit">Save</button>
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Event Image</label>
+        <input type="file" name="imageFile" accept="image/*" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn-green">Save</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

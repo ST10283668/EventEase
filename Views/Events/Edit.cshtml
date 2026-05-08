@@ -1,25 +1,56 @@
-﻿@model EventEase.Models.Event
+@model EventEase.Models.Event
 
 <h2>Edit Event</h2>
 
-<form method="post">
-    <input type="hidden" name="EventId" value="@Model.EventId" />
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input asp-for="EventId" type="hidden" />
+    <input asp-for="ImageUrl" type="hidden" />
 
-    <input name="EventName" value="@Model.EventName" />
+    <div asp-validation-summary="All" class="text-danger"></div>
 
-    <select name="VenueId">
-        @foreach (var v in ViewBag.Venues)
-        {
-            <option value="@v.VenueId">@v.VenueName</option>
-        }
-    </select>
+    <div class="mb-3">
+        <label asp-for="EventName"></label>
+        <input asp-for="EventName" class="form-control" />
+    </div>
 
-    <select name="EventTypeId">
-        @foreach (var t in ViewBag.EventTypes)
-        {
-            <option value="@t.EventTypeId">@t.TypeName</option>
-        }
-    </select>
+    <div class="mb-3">
+        <label asp-for="StartDate"></label>
+        <input asp-for="StartDate" type="datetime-local" class="form-control" />
+    </div>
 
-    <button type="submit">Update</button>
+    <div class="mb-3">
+        <label asp-for="EndDate"></label>
+        <input asp-for="EndDate" type="datetime-local" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VenueId"></label>
+        <select asp-for="VenueId" asp-items="ViewBag.Venues" class="form-control">
+            <option value="">Select Venue</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EventTypeId"></label>
+        <select asp-for="EventTypeId" asp-items="ViewBag.EventTypes" class="form-control">
+            <option value="">Select Event Type</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Replace Event Image</label>
+        <input type="file" name="imageFile" accept="image/*" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn-green">Update</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

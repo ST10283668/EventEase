@@ -1,12 +1,42 @@
-﻿@model EventEase.Models.Venue
+@model EventEase.Models.Venue
 
 <h2>Edit Venue</h2>
 
-<form method="post">
-    <input name="VenueId" value="@Model.VenueId" type="hidden" />
-    <input name="VenueName" value="@Model.VenueName" />
-    <input name="Location" value="@Model.Location" />
-    <input name="Capacity" value="@Model.Capacity" />
+<form asp-action="Edit" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input asp-for="VenueId" type="hidden" />
+    <input asp-for="ImageUrl" type="hidden" />
 
-    <button type="submit">Update</button>
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="mb-3">
+        <label asp-for="VenueName"></label>
+        <input asp-for="VenueName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Location"></label>
+        <input asp-for="Location" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Capacity"></label>
+        <input asp-for="Capacity" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Description"></label>
+        <input asp-for="Description" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Replace Venue Image</label>
+        <input type="file" name="imageFile" accept="image/*" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn-green">Update</button>
 </form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

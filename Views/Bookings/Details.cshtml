@@ -1,8 +1,37 @@
-﻿@model EventEase.Models.Booking
+@model EventEase.Models.Booking
 
 <h2>Booking Details</h2>
 
-<p>Reference: @Model.BookingReference</p>
-<p>Event: @Model.Event?.EventName</p>
-<p>Venue: @Model.Venue?.VenueName</p>
-<p>Status: @Model.Status</p>
+<table class="table table-dark table-bordered">
+    <tr>
+        <th>Booking ID</th>
+        <td>@Model.BookingId</td>
+    </tr>
+    <tr>
+        <th>Reference</th>
+        <td>@Model.BookingReference</td>
+    </tr>
+    <tr>
+        <th>Venue</th>
+        <td>@(Model.Venue?.VenueName ?? "No Venue")</td>
+    </tr>
+    <tr>
+        <th>Event</th>
+        <td>@(Model.Event?.EventName ?? "No Event")</td>
+    </tr>
+    <tr>
+        <th>Start</th>
+        <td>@Model.StartDate.ToString("yyyy-MM-dd HH:mm")</td>
+    </tr>
+    <tr>
+        <th>End</th>
+        <td>@Model.EndDate.ToString("yyyy-MM-dd HH:mm")</td>
+    </tr>
+    <tr>
+        <th>Status</th>
+        <td>@Model.Status</td>
+    </tr>
+</table>
+
+<a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn-green">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back</a>

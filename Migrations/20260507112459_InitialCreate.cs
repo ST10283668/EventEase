@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace EventEase.Migrations
 {
     /// <inheritdoc />
@@ -55,8 +53,8 @@ namespace EventEase.Migrations
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    VenueId = table.Column<int>(type: "int", nullable: true),
-                    EventTypeId = table.Column<int>(type: "int", nullable: true)
+                    VenueId = table.Column<int>(type: "int", nullable: false),
+                    EventTypeId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -66,13 +64,13 @@ namespace EventEase.Migrations
                         column: x => x.EventTypeId,
                         principalTable: "EventTypes",
                         principalColumn: "EventTypeId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Events_Venues_VenueId",
                         column: x => x.VenueId,
                         principalTable: "Venues",
                         principalColumn: "VenueId",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -81,7 +79,7 @@ namespace EventEase.Migrations
                 {
                     BookingId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookingReference = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    BookingReference = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     VenueId = table.Column<int>(type: "int", nullable: false),
                     EventId = table.Column<int>(type: "int", nullable: false),
                     BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -105,31 +103,6 @@ namespace EventEase.Migrations
                         principalTable: "Venues",
                         principalColumn: "VenueId",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.InsertData(
-                table: "EventTypes",
-                columns: new[] { "EventTypeId", "Description", "TypeName" },
-                values: new object[,]
-                {
-                    { 1, "Professional conferences and seminars", "Conference" },
-                    { 2, "Wedding ceremonies and receptions", "Wedding" },
-                    { 3, "Music concerts and live performances", "Concert" },
-                    { 4, "Corporate functions and team events", "Corporate" },
-                    { 5, "Art shows, trade fairs and exhibitions", "Exhibition" },
-                    { 6, "Birthday parties and celebrations", "Birthday" },
-                    { 7, "Sporting events and tournaments", "Sports" },
-                    { 8, "Other event types", "Other" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Venues",
-                columns: new[] { "VenueId", "Capacity", "Description", "ImageUrl", "Location", "VenueName" },
-                values: new object[,]
-                {
-                    { 1, 500, "A luxurious ballroom with state-of-the-art facilities.", "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?w=800", "123 Main Street, Sandton, Johannesburg", "The Grand Ballroom" },
-                    { 2, 300, "Modern conference facilities with stunning harbour views.", "https://images.unsplash.com/photo-1497366216548-37526070297c?w=800", "45 Harbour Road, V&A Waterfront, Cape Town", "Waterfront Conference Centre" },
-                    { 3, 150, "An elegant outdoor pavilion surrounded by beautiful gardens.", "https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?w=800", "78 Botanical Avenue, Durban North, Durban", "Garden Pavilion" }
                 });
 
             migrationBuilder.CreateIndex(

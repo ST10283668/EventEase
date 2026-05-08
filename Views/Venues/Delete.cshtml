@@ -2,9 +2,16 @@
 
 <h2>Delete Venue</h2>
 
-<p>Are you sure you want to delete @Model.VenueName?</p>
+<h3>Are you sure?</h3>
 
-<form method="post">
+<p>@Model.VenueName</p>
+<p>@Model.Location</p>
+<p>@Model.Capacity</p>
+
+<form asp-action="DeleteConfirmed" method="post">
+    @Html.AntiForgeryToken()
     <input type="hidden" name="id" value="@Model.VenueId" />
-    <button type="submit">Delete</button>
+    <button type="submit" class="btn btn-danger">Delete</button>
 </form>
+
+<a asp-action="Index">Cancel</a>

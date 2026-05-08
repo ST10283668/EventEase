@@ -28,14 +28,16 @@ namespace EventEase.Models
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; }
 
+        [Required(ErrorMessage = "Venue is required.")]
         [Display(Name = "Venue")]
-        public int? VenueId { get; set; }
+        public int VenueId { get; set; }
 
         [ForeignKey("VenueId")]
         public Venue? Venue { get; set; }
 
+        [Required(ErrorMessage = "Event type is required.")]
         [Display(Name = "Event Type")]
-        public int? EventTypeId { get; set; }
+        public int EventTypeId { get; set; }
 
         [ForeignKey("EventTypeId")]
         public EventType? EventType { get; set; }
