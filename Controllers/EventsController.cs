@@ -18,7 +18,12 @@ namespace EventEase.Controllers
             _blobStorageService = blobStorageService;
         }
 
-        public async Task<IActionResult> Index(string? searchString)
+        public async Task<IActionResult> Index(
+            string? searchString,
+            int? eventTypeId,
+            DateTime? startDate,
+            DateTime? endDate,
+            bool availableOnly = false)
         {
             var events = _context.Events
                 .Include(e => e.Venue)
@@ -34,7 +39,43 @@ namespace EventEase.Controllers
                     (e.EventType != null && e.EventType.TypeName.Contains(search)));
             }
 
+            if (eventTypeId.HasValue)
+            {
+                events = events.Where(e => e.EventTypeId == eventTypeId.Value);
+            }
+
+            if (startDate.HasValue)
+            {
+                events = events.Where(e => e.StartDate >= startDate.Value);
+            }
+
+            if (endDate.HasValue)
+            {
+                var endOfDay = endDate.Value.Date.AddDays(1);
+                events = events.Where(e => e.StartDate < endOfDay);
+            }
+
+            if (availableOnly)
+            {
+                events = events.Where(e =>
+                    !_context.Bookings.Any(b =>
+                        b.VenueId == e.VenueId &&
+                        b.Status != "Cancelled" &&
+                        e.StartDate < b.EndDate &&
+                        e.EndDate > b.StartDate));
+            }
+
             ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentEventTypeId"] = eventTypeId;
+            ViewData["CurrentStartDate"] = startDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentEndDate"] = endDate?.ToString("yyyy-MM-dd");
+            ViewData["CurrentAvailableOnly"] = availableOnly;
+            ViewBag.EventTypes = new SelectList(
+                await _context.EventTypes.OrderBy(et => et.TypeName).ToListAsync(),
+                "EventTypeId",
+                "TypeName",
+                eventTypeId);
+
             return View(await events.OrderBy(e => e.StartDate).ToListAsync());
         }
 

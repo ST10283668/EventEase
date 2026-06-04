@@ -10,14 +10,27 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<BlobStorageService>();
 
 // DB
+var defaultConnection = GetConfiguredValue(
+    builder.Configuration.GetConnectionString("DefaultConnection"),
+    builder.Configuration["SQLAZURECONNSTR_DefaultConnection"],
+    builder.Configuration["DefaultConnection"],
+    builder.Configuration["ConnectionString"]);
+
+if (string.IsNullOrWhiteSpace(defaultConnection))
+{
+    throw new InvalidOperationException("DefaultConnection is not configured.");
+}
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(defaultConnection, sqlOptions => sqlOptions.EnableRetryOnFailure()));
 
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+    context.Database.Migrate();
 
     if (!context.EventTypes.Any(et => et.TypeName == "Wedding"))
     {
@@ -42,6 +55,16 @@ using (var scope = app.Services.CreateScope())
     if (!context.EventTypes.Any(et => et.TypeName == "Workshop"))
     {
         context.EventTypes.Add(new EventType { TypeName = "Workshop", Description = "Training sessions and workshops" });
+    }
+
+    if (!context.EventTypes.Any(et => et.TypeName == "Corporate"))
+    {
+        context.EventTypes.Add(new EventType { TypeName = "Corporate", Description = "Company meetings, launches, and formal business events" });
+    }
+
+    if (!context.EventTypes.Any(et => et.TypeName == "Exhibition"))
+    {
+        context.EventTypes.Add(new EventType { TypeName = "Exhibition", Description = "Expos, showcases, and public display events" });
     }
 
     if (!context.Venues.Any(v => v.VenueName == "Grand Hall"))
@@ -142,4 +165,11 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+static string? GetConfiguredValue(params string?[] values)
+{
+    return values.FirstOrDefault(value =>
+        !string.IsNullOrWhiteSpace(value) &&
+        !value.StartsWith("Set this", StringComparison.OrdinalIgnoreCase));
+}
 

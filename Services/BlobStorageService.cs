@@ -9,12 +9,16 @@ namespace EventEase.Services
 
         public BlobStorageService(IConfiguration configuration)
         {
-            var connectionString = configuration["AzureBlobStorage:ConnectionString"]
-                ?? configuration["AzureStorage:ConnectionString"]
-                ?? configuration.GetConnectionString("AzureStorage")
+            var connectionString = GetConfiguredValue(
+                configuration["AzureBlobStorage:ConnectionString"],
+                configuration["AzureStorage:ConnectionString"],
+                configuration.GetConnectionString("AzureStorage"),
+                configuration["CUSTOMCONNSTR_AzureBlobStorage"],
+                configuration["AZURE_STORAGE_CONNECTION_STRING"])
                 ?? "UseDevelopmentStorage=true";
-            var containerName = configuration["AzureBlobStorage:ContainerName"]
-                ?? configuration["AzureStorage:ContainerName"]
+            var containerName = GetConfiguredValue(
+                configuration["AzureBlobStorage:ContainerName"],
+                configuration["AzureStorage:ContainerName"])
                 ?? "venue-images";
 
             var options = new BlobClientOptions(BlobClientOptions.ServiceVersion.V2021_12_02);
@@ -71,6 +75,13 @@ namespace EventEase.Services
             }
 
             return imagePath;
+        }
+
+        private static string? GetConfiguredValue(params string?[] values)
+        {
+            return values.FirstOrDefault(value =>
+                !string.IsNullOrWhiteSpace(value) &&
+                !value.StartsWith("Set this", StringComparison.OrdinalIgnoreCase));
         }
     }
 }
