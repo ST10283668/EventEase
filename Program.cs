@@ -28,121 +28,128 @@ var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-    context.Database.Migrate();
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Wedding"))
+    try
     {
-        context.EventTypes.Add(new EventType { TypeName = "Wedding", Description = "Wedding ceremonies and receptions" });
-    }
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        context.Database.Migrate();
 
-    if (!context.EventTypes.Any(et => et.TypeName == "Conference"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Conference", Description = "Business conferences and seminars" });
-    }
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Birthday"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Birthday", Description = "Birthday parties and celebrations" });
-    }
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Concert"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Concert", Description = "Music and live performance events" });
-    }
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Workshop"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Workshop", Description = "Training sessions and workshops" });
-    }
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Corporate"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Corporate", Description = "Company meetings, launches, and formal business events" });
-    }
-
-    if (!context.EventTypes.Any(et => et.TypeName == "Exhibition"))
-    {
-        context.EventTypes.Add(new EventType { TypeName = "Exhibition", Description = "Expos, showcases, and public display events" });
-    }
-
-    if (!context.Venues.Any(v => v.VenueName == "Grand Hall"))
-    {
-        context.Venues.Add(new Venue
+        if (!context.EventTypes.Any(et => et.TypeName == "Wedding"))
         {
-            VenueName = "Grand Hall",
-            Location = "Johannesburg",
-            Capacity = 300,
-            Description = "Large indoor venue for weddings, conferences, and formal events."
-        });
-    }
+            context.EventTypes.Add(new EventType { TypeName = "Wedding", Description = "Wedding ceremonies and receptions" });
+        }
 
-    if (!context.Venues.Any(v => v.VenueName == "Garden Pavilion"))
-    {
-        context.Venues.Add(new Venue
+        if (!context.EventTypes.Any(et => et.TypeName == "Conference"))
         {
-            VenueName = "Garden Pavilion",
-            Location = "Pretoria",
-            Capacity = 120,
-            Description = "Outdoor venue suited for birthdays, receptions, and smaller events."
-        });
-    }
+            context.EventTypes.Add(new EventType { TypeName = "Conference", Description = "Business conferences and seminars" });
+        }
 
-    if (!context.Venues.Any(v => v.VenueName == "City Conference Room"))
-    {
-        context.Venues.Add(new Venue
+        if (!context.EventTypes.Any(et => et.TypeName == "Birthday"))
         {
-            VenueName = "City Conference Room",
-            Location = "Sandton",
-            Capacity = 80,
-            Description = "Professional venue for meetings, workshops, and business events."
-        });
-    }
+            context.EventTypes.Add(new EventType { TypeName = "Birthday", Description = "Birthday parties and celebrations" });
+        }
 
-    context.SaveChanges();
+        if (!context.EventTypes.Any(et => et.TypeName == "Concert"))
+        {
+            context.EventTypes.Add(new EventType { TypeName = "Concert", Description = "Music and live performance events" });
+        }
 
-    if (!context.Events.Any())
-    {
-        var grandHall = context.Venues.First(v => v.VenueName == "Grand Hall");
-        var gardenPavilion = context.Venues.First(v => v.VenueName == "Garden Pavilion");
-        var conferenceRoom = context.Venues.First(v => v.VenueName == "City Conference Room");
+        if (!context.EventTypes.Any(et => et.TypeName == "Workshop"))
+        {
+            context.EventTypes.Add(new EventType { TypeName = "Workshop", Description = "Training sessions and workshops" });
+        }
 
-        var wedding = context.EventTypes.First(et => et.TypeName == "Wedding");
-        var birthday = context.EventTypes.First(et => et.TypeName == "Birthday");
-        var workshop = context.EventTypes.First(et => et.TypeName == "Workshop");
+        if (!context.EventTypes.Any(et => et.TypeName == "Corporate"))
+        {
+            context.EventTypes.Add(new EventType { TypeName = "Corporate", Description = "Company meetings, launches, and formal business events" });
+        }
 
-        context.Events.AddRange(
-            new Event
+        if (!context.EventTypes.Any(et => et.TypeName == "Exhibition"))
+        {
+            context.EventTypes.Add(new EventType { TypeName = "Exhibition", Description = "Expos, showcases, and public display events" });
+        }
+
+        if (!context.Venues.Any(v => v.VenueName == "Grand Hall"))
+        {
+            context.Venues.Add(new Venue
             {
-                EventName = "Smith Wedding",
-                StartDate = DateTime.Today.AddDays(7).AddHours(14),
-                EndDate = DateTime.Today.AddDays(7).AddHours(22),
-                VenueId = grandHall.VenueId,
-                EventTypeId = wedding.EventTypeId,
-                Description = "Wedding ceremony and evening reception."
-            },
-            new Event
+                VenueName = "Grand Hall",
+                Location = "Johannesburg",
+                Capacity = 300,
+                Description = "Large indoor venue for weddings, conferences, and formal events."
+            });
+        }
+
+        if (!context.Venues.Any(v => v.VenueName == "Garden Pavilion"))
+        {
+            context.Venues.Add(new Venue
             {
-                EventName = "Birthday Celebration",
-                StartDate = DateTime.Today.AddDays(10).AddHours(12),
-                EndDate = DateTime.Today.AddDays(10).AddHours(17),
-                VenueId = gardenPavilion.VenueId,
-                EventTypeId = birthday.EventTypeId,
-                Description = "Private birthday event."
-            },
-            new Event
+                VenueName = "Garden Pavilion",
+                Location = "Pretoria",
+                Capacity = 120,
+                Description = "Outdoor venue suited for birthdays, receptions, and smaller events."
+            });
+        }
+
+        if (!context.Venues.Any(v => v.VenueName == "City Conference Room"))
+        {
+            context.Venues.Add(new Venue
             {
-                EventName = "Cloud Skills Workshop",
-                StartDate = DateTime.Today.AddDays(14).AddHours(9),
-                EndDate = DateTime.Today.AddDays(14).AddHours(15),
-                VenueId = conferenceRoom.VenueId,
-                EventTypeId = workshop.EventTypeId,
-                Description = "Training workshop for cloud development."
-            }
-        );
+                VenueName = "City Conference Room",
+                Location = "Sandton",
+                Capacity = 80,
+                Description = "Professional venue for meetings, workshops, and business events."
+            });
+        }
 
         context.SaveChanges();
+
+        if (!context.Events.Any())
+        {
+            var grandHall = context.Venues.First(v => v.VenueName == "Grand Hall");
+            var gardenPavilion = context.Venues.First(v => v.VenueName == "Garden Pavilion");
+            var conferenceRoom = context.Venues.First(v => v.VenueName == "City Conference Room");
+
+            var wedding = context.EventTypes.First(et => et.TypeName == "Wedding");
+            var birthday = context.EventTypes.First(et => et.TypeName == "Birthday");
+            var workshop = context.EventTypes.First(et => et.TypeName == "Workshop");
+
+            context.Events.AddRange(
+                new Event
+                {
+                    EventName = "Smith Wedding",
+                    StartDate = DateTime.Today.AddDays(7).AddHours(14),
+                    EndDate = DateTime.Today.AddDays(7).AddHours(22),
+                    VenueId = grandHall.VenueId,
+                    EventTypeId = wedding.EventTypeId,
+                    Description = "Wedding ceremony and evening reception."
+                },
+                new Event
+                {
+                    EventName = "Birthday Celebration",
+                    StartDate = DateTime.Today.AddDays(10).AddHours(12),
+                    EndDate = DateTime.Today.AddDays(10).AddHours(17),
+                    VenueId = gardenPavilion.VenueId,
+                    EventTypeId = birthday.EventTypeId,
+                    Description = "Private birthday event."
+                },
+                new Event
+                {
+                    EventName = "Cloud Skills Workshop",
+                    StartDate = DateTime.Today.AddDays(14).AddHours(9),
+                    EndDate = DateTime.Today.AddDays(14).AddHours(15),
+                    VenueId = conferenceRoom.VenueId,
+                    EventTypeId = workshop.EventTypeId,
+                    Description = "Training workshop for cloud development."
+                }
+            );
+
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Database migration or seed data failed during startup.");
     }
 }
 
